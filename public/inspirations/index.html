@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GrowLead · UI inspirations</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --ink:#161513; --muted:#6f6b64; --line:#e6e1d8; --bg:#f3f1ec; --card:#fff; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Plus Jakarta Sans", Inter, sans-serif; letter-spacing: -.015em;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 56px 28px 80px; }
+.kicker { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #a39e94; margin: 0 0 10px; }
+h1 { margin: 0; font-size: 36px; font-weight: 800; letter-spacing: -.045em; }
+.lead { margin: 12px 0 36px; color: var(--muted); font-size: 15.5px; max-width: 560px; line-height: 1.5; }
+h2 { margin: 36px 0 14px; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #a39e94; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+}
+.preview { height: 168px; position: relative; overflow: hidden; }
+.preview.lumen { background: #f3f1ec; }
+.preview.noir { background: #050506; }
+.preview.old { background: #f1f5f9; }
+.mini-side {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 46px;
+}
+.lumen .mini-side { background: #faf9f6; border-right: 1px solid #e6e1d8; }
+.noir .mini-side { background: #12141a; }
+.old .mini-side { background: #0f172a; }
+.mini-main { margin-left: 46px; padding: 16px; }
+.bar { height: 8px; border-radius: 99px; background: #e2e8f0; margin-bottom: 8px; }
+.lumen .bar.accent { background: #161513; }
+.noir .bar.accent { background: #d4b36a; }
+.old .bar.accent { background: #2563eb; }
+.row { display: flex; gap: 8px; margin-top: 12px; }
+.blk { flex: 1; height: 52px; border-radius: 10px; }
+.lumen .blk { background: #fff; border: 1px solid #e6e1d8; }
+.lumen .blk.feat { background: #161513; }
+.noir .blk { background: #14161c; border: 1px solid rgba(255,255,255,.08); }
+.noir .blk.feat { background: #d4b36a; }
+.old .blk { background: #fff; border: 1px solid #e8edf5; }
+.copy { padding: 18px 20px 20px; }
+.copy h3 { margin: 0 0 6px; font-size: 18px; font-weight: 800; letter-spacing: -.03em; }
+.copy p { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+.btn {
+  display: inline-flex; align-items: center; height: 38px; padding: 0 14px;
+  border-radius: 11px; background: #161513; color: #f6f1e8;
+  font-weight: 750; font-size: 13px; text-decoration: none;
+}
+.btn.ghost { background: #fff; color: #161513; border: 1px solid var(--line); }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 28px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">GrowLead CRM</p>
+  <h1>Two dashboard directions</h1>
+  <p class="lead">Two product-grade dashboard directions. Open either mock, compare the chrome, then we can build the one you prefer into GrowLead.</p>
+
+  <h2>Dashboard</h2>
+  <div class="grid">
+    <article class="card">
+      <div class="preview lumen">
+        <div class="mini-side"></div>
+        <div class="mini-main">
+          <div class="bar accent" style="width:42%"></div>
+          <div class="bar" style="width:70%"></div>
+          <div class="row">
+            <div class="blk feat"></div>
+            <div class="blk"></div>
+            <div class="blk"></div>
+          </div>
+        </div>
+      </div>
+      <div class="copy">
+        <h3>Lumen</h3>
+        <p>Warm gallery light — cream canvas, ink type, serif figures, and a hero leads chart. Feels like Attio meets a private studio.</p>
+        <a class="btn" href="lumen.html">Open Lumen</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="preview noir">
+        <div class="mini-side"></div>
+        <div class="mini-main">
+          <div class="bar accent" style="width:36%"></div>
+          <div class="bar" style="width:62%;background:#2a2d36"></div>
+          <div class="row">
+            <div class="blk feat"></div>
+            <div class="blk"></div>
+            <div class="blk"></div>
+          </div>
+        </div>
+      </div>
+      <div class="copy">
+        <h3>Noir</h3>
+        <p>Cinematic dark command center — gold glow, glass panels, labeled sidebar, and a donut pipeline. Same data, night-mode luxury.</p>
+        <a class="btn" href="noir.html">Open Noir</a>
+      </div>
+    </article>
+  </div>
+
+  <h2>Create campaign</h2>
+  <div class="grid">
+    <article class="card">
+      <div class="preview old">
+        <div class="mini-side"></div>
+        <div class="mini-main">
+          <div class="bar accent" style="width:55%"></div>
+          <div class="bar" style="width:80%"></div>
+          <div class="row">
+            <div class="blk" style="background:#0f172a"></div>
+            <div class="blk"></div>
+            <div class="blk"></div>
+          </div>
+        </div>
+      </div>
+      <div class="copy">
+        <h3>Atelier</h3>
+        <p>Numbered brief, source tiles, and a forecast panel. Uses the current GrowLead chrome.</p>
+        <a class="btn ghost" href="atelier.html">Open Atelier</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="preview old">
+        <div class="mini-side"></div>
+        <div class="mini-main">
+          <div class="bar accent" style="width:40%;background:#fbbf24"></div>
+          <div class="bar" style="width:70%"></div>
+          <div class="row">
+            <div class="blk" style="max-width:40px"></div>
+            <div class="blk"></div>
+          </div>
+        </div>
+      </div>
+      <div class="copy">
+        <h3>Obsidian</h3>
+        <p>Properties panel with a step rail and compact AI forecast. Same chrome as production today.</p>
+        <a class="btn ghost" href="obsidian.html">Open Obsidian</a>
+      </div>
+    </article>
+  </div>
+</div>
+</body>
+</html>

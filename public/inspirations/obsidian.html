@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inspiration B — Obsidian · Create Campaign</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/crm.css">
+<style>
+.insp-b { --line:#e8edf5; --soft:#f8fafc; }
+.insp-b .crm-topbar { padding-bottom:14px; border-bottom:1px solid var(--line); background:#fff; }
+.insp-b .crm-content { padding-top:20px; }
+.insp-switch { display:inline-flex; padding:3px; background:#f1f5f9; border-radius:11px; margin-right:6px; }
+.insp-switch a {
+  height:30px; padding:0 11px; border-radius:8px; font-size:12px; font-weight:700;
+  display:inline-flex; align-items:center; color:#64748b; text-decoration:none;
+}
+.insp-switch a.on { background:#fff; color:var(--cp-blue); box-shadow:0 1px 2px rgba(15,23,42,.08); }
+.crumb { font-size:12px; color:#94a3b8; font-weight:600; margin-bottom:6px; }
+.crumb b { color:#334155; }
+
+.shell { display:grid; grid-template-columns: 228px minmax(0,1fr) 300px; gap:18px; align-items:start; }
+.steps {
+  background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px 14px;
+  position:sticky; top:16px;
+}
+.steps h4 { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#94a3b8; font-weight:800; margin:0 12px 12px; }
+.tl { position:relative; }
+.tl::before {
+  content:""; position:absolute; left:23px; top:18px; bottom:18px; width:2px; background:#e2e8f0;
+}
+.st { position:relative; display:grid; grid-template-columns:28px 1fr; gap:10px; padding:9px 10px; border-radius:10px; }
+.st .d {
+  width:28px; height:28px; border-radius:50%; background:#fff; border:2px solid #e2e8f0;
+  display:grid; place-items:center; font-size:11px; font-weight:800; color:#94a3b8; z-index:1;
+}
+.st b { display:block; font-size:13px; color:#334155; font-weight:700; }
+.st small { color:#94a3b8; font-size:11px; }
+.st.on { background:#eff6ff; }
+.st.on .d { background:var(--cp-blue); border-color:var(--cp-blue); color:#fff; }
+.st.on b { color:var(--cp-blue); }
+.st.done .d { background:#dcfce7; border-color:#86efac; color:#15803d; font-size:0; }
+.st.done .d::after { content:"✓"; font-size:12px; }
+
+.panel { background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+.panel-h { padding:20px 24px 16px; border-bottom:1px solid var(--line); }
+.panel-h h2 { margin:0; font-size:18px; font-weight:800; letter-spacing:-.03em; }
+.panel-h p { margin:4px 0 0; color:#64748b; font-size:13px; }
+
+.rowx {
+  display:grid; grid-template-columns: 168px minmax(0,1fr); gap:16px; align-items:center;
+  padding:14px 24px; border-bottom:1px solid #f1f5f9;
+}
+.rowx:last-child { border-bottom:0; }
+.rowx .k { font-size:13px; font-weight:650; color:#475569; }
+.rowx .k span { display:block; font-size:11.5px; color:#94a3b8; font-weight:500; margin-top:2px; }
+
+.plats { display:flex; gap:8px; }
+.pbtn {
+  display:flex; align-items:center; gap:8px; height:40px; padding:0 12px; border-radius:10px;
+  border:1px solid var(--line); background:#fff; font-weight:700; font-size:13px; cursor:pointer; color:#0f172a;
+}
+.pbtn.on { border-color:var(--cp-blue); background:#eff6ff; color:var(--cp-blue); }
+.pbtn.off { opacity:.45; cursor:not-allowed; }
+.pbtn i { font-size:16px; }
+.pbtn.meta i { color:#1877F2; }
+
+.in, select.in, input.in {
+  width:100%; height:40px; border:1px solid var(--line); background:var(--soft);
+  border-radius:10px; padding:0 12px; font-size:13.5px; font-weight:500; outline:none;
+}
+.in:focus { background:#fff; border-color:#93c5fd; box-shadow:0 0 0 4px rgba(37,99,235,.1); }
+.title { font-size:16px; font-weight:750; height:44px; background:#fff; }
+
+.acct { display:flex; align-items:center; gap:10px; }
+.acct .ico { width:30px; height:30px; border-radius:8px; background:#1877F2; color:#fff; display:grid; place-items:center; }
+.acct b { display:block; font-size:13px; line-height:1.15; }
+.acct small { color:#64748b; font-size:11.5px; }
+.ok { margin-left:auto; color:#15803d; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px; }
+.ok::before { content:""; width:7px; height:7px; border-radius:50%; background:#16a34a; }
+
+.seg { display:inline-flex; background:var(--soft); border:1px solid var(--line); padding:3px; border-radius:10px; }
+.seg button {
+  height:32px; padding:0 12px; border:0; background:transparent; border-radius:8px;
+  font-size:12.5px; font-weight:700; color:#64748b; cursor:pointer;
+}
+.seg button.on { background:#fff; color:var(--cp-blue); box-shadow:0 1px 2px rgba(15,23,42,.08); }
+
+.chipx {
+  height:30px; padding:0 10px; border-radius:999px; background:#eff6ff; color:#1d4ed8;
+  font-size:12.5px; font-weight:700; display:inline-flex; align-items:center; gap:6px;
+}
+.money { display:flex; align-items:center; max-width:220px; height:40px; border:1px solid var(--line); border-radius:10px; background:var(--soft); overflow:hidden; }
+.money em { font-style:normal; padding:0 10px; font-size:12px; font-weight:800; color:#64748b; border-right:1px solid var(--line); }
+.money input { border:0; outline:0; flex:1; height:100%; background:transparent; padding:0 10px; font-weight:700; width:100%; }
+
+.dates { display:flex; gap:8px; align-items:center; }
+.dates .in { max-width:160px; }
+.dates span { color:#94a3b8; font-size:12px; }
+
+.g { max-width:420px; }
+.gbar { height:6px; background:#e2e8f0; border-radius:99px; position:relative; margin:6px 0; }
+.gbar i { position:absolute; left:22%; width:46%; height:100%; background:var(--cp-blue); border-radius:99px; }
+
+.foot {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 24px; background:#f8fafc; border-top:1px solid var(--line);
+}
+
+.side {
+  position:sticky; top:16px; display:flex; flex-direction:column; gap:12px;
+}
+.cardx { background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px; }
+.cardx h3 { margin:0 0 12px; font-size:13px; font-weight:800; display:flex; align-items:center; gap:6px; }
+.cardx h3 i { color:var(--cp-yellow); }
+.hero { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.hero div { background:#f8fafc; border-radius:12px; padding:12px; }
+.hero span { display:block; font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.04em; }
+.hero b { font-size:20px; letter-spacing:-.04em; }
+.line { display:flex; justify-content:space-between; gap:8px; padding:8px 0; border-top:1px solid #f1f5f9; font-size:12.5px; }
+.line span { color:#64748b; }
+.line b { font-weight:700; text-align:right; }
+.conf { height:4px; background:#e2e8f0; border-radius:99px; overflow:hidden; margin:8px 0 6px; }
+.conf i { display:block; width:86%; height:100%; background:#16a34a; }
+
+@media (max-width: 1200px) { .shell { grid-template-columns:1fr; } .steps, .side { position:static; } }
+</style>
+</head>
+<body class="crm-body">
+<div class="crm-app">
+  <aside class="crm-sidebar">
+    <div class="crm-brand">
+      <div class="crm-logo"><i class="bi bi-house-door-fill"></i><i class="bi bi-megaphone-fill horn"></i></div>
+      <div class="crm-brand-name">GrowLead <span>CRM</span></div>
+    </div>
+    <nav class="crm-nav">
+      <a href="#"><i class="bi bi-grid-1x2"></i><span>Dashboard</span></a>
+      <a href="#"><i class="bi bi-people"></i><span>Leads</span></a>
+      <a href="#" class="active"><i class="bi bi-megaphone"></i><span>Campaigns</span></a>
+      <a href="#"><i class="bi bi-stars"></i><span>AI Copilot</span><span class="beta">Beta</span></a>
+      <a href="#"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
+      <a href="#"><i class="bi bi-person-badge"></i><span>Users</span></a>
+      <a href="#"><i class="bi bi-lightning-charge"></i><span>Automations</span></a>
+      <a href="#"><i class="bi bi-plug"></i><span>Integrations</span></a>
+      <a href="#"><i class="bi bi-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="crm-sidebar-promo">
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=600&q=60" alt="">
+      <div class="inner">
+        <p>Grow your brand on social media. Run smarter campaigns. Close more deals.</p>
+        <a href="#" class="btn btn-sm btn-outline-light">Explore Campaigns →</a>
+      </div>
+    </div>
+    <div class="crm-userbox">
+      <div class="crm-avatar">AR</div>
+      <div class="flex-grow-1"><div class="fw-bold">Ali Raza</div><small class="text-white-50">Administrator</small></div>
+      <i class="bi bi-chevron-down"></i>
+    </div>
+  </aside>
+
+  <div class="crm-main insp-b">
+    <div class="crm-topbar">
+      <div>
+        <div class="crumb">Campaigns / <b>New campaign</b> / Source</div>
+        <h1 class="crm-title">New campaign</h1>
+        <p class="crm-subtitle">A properties-style setup. Scan left to right — label, value, recommendation.</p>
+      </div>
+      <div class="crm-actions">
+        <div class="insp-switch"><a href="atelier.html">Atelier</a><a class="on" href="obsidian.html">Obsidian</a></div>
+        <button class="btn btn-outline-soft">Save draft</button>
+        <a href="index.html" class="btn btn-outline-soft"><i class="bi bi-x-lg"></i></a>
+      </div>
+    </div>
+
+    <div class="crm-content">
+      <div class="shell">
+        <aside class="steps">
+          <h4>Launch path</h4>
+          <div class="tl">
+            <div class="st on"><div class="d">1</div><div><b>Source</b><small>Origin & setup</small></div></div>
+            <div class="st"><div class="d">2</div><div><b>Connect Account</b><small>Verify the link</small></div></div>
+            <div class="st"><div class="d">3</div><div><b>Select Campaign</b><small>Details</small></div></div>
+            <div class="st"><div class="d">4</div><div><b>Assign Agents</b><small>Team</small></div></div>
+            <div class="st"><div class="d">5</div><div><b>Routing Rules</b><small>Distribution</small></div></div>
+            <div class="st"><div class="d">6</div><div><b>Budget & Goals</b><small>Targets</small></div></div>
+            <div class="st"><div class="d">7</div><div><b>Review</b><small>Final check</small></div></div>
+            <div class="st"><div class="d">8</div><div><b>Activate</b><small>Go live</small></div></div>
+          </div>
+        </aside>
+
+        <form class="panel" onsubmit="return false">
+          <div class="panel-h">
+            <h2>Source setup</h2>
+            <p>Each row is a decision. Keep scanning — nothing is buried in stacked cards.</p>
+          </div>
+
+          <div class="rowx">
+            <div class="k">Source<span>Ad platform</span></div>
+            <div class="plats">
+              <button type="button" class="pbtn meta on"><i class="bi bi-meta"></i> Meta</button>
+              <button type="button" class="pbtn off"><i class="bi bi-google"></i> Google</button>
+              <button type="button" class="pbtn off"><i class="bi bi-tiktok"></i> TikTok</button>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Campaign name<span>Internal only</span></div>
+            <input class="in title" placeholder="e.g. Housing leads · Aug 2026">
+          </div>
+          <div class="rowx">
+            <div class="k">Ad account</div>
+            <div class="acct">
+              <div class="ico"><i class="bi bi-meta"></i></div>
+              <div><b>Ali Raza Ads Account</b><small>act_184920</small></div>
+              <span class="ok">Connected</span>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Objective</div>
+            <div class="seg" data-seg>
+              <button type="button" class="on">Leads</button>
+              <button type="button">Traffic</button>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Buying type</div>
+            <div class="seg" data-seg>
+              <button type="button" class="on">Auction</button>
+              <button type="button">Reservation</button>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Special category</div>
+            <select class="in" style="max-width:240px"><option>Housing</option><option>Credit</option><option>None</option></select>
+          </div>
+          <div class="rowx">
+            <div class="k">Ad set name</div>
+            <input class="in" placeholder="Campaign name + audience">
+          </div>
+          <div class="rowx">
+            <div class="k">Conversion<span>Where leads land</span></div>
+            <div class="d-flex gap-2 flex-wrap">
+              <div class="seg" data-seg>
+                <button type="button" class="on">Website</button>
+                <button type="button">Instant form</button>
+              </div>
+              <select class="in" style="max-width:140px"><option>Lead</option></select>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Pixel</div>
+            <div class="acct">
+              <div class="ico" style="background:#0f172a"><i class="bi bi-broadcast"></i></div>
+              <div><b>Ali Raza Pixel</b><small>Fired 12 min ago</small></div>
+              <span class="ok">Active</span>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Audience</div>
+            <div>
+              <select class="in" style="max-width:240px;margin-bottom:8px"><option>High-intent buyers</option></select>
+              <div class="d-flex gap-2 flex-wrap">
+                <span class="chipx">United States</span>
+                <span class="chipx">25–45</span>
+                <span class="chipx">All genders</span>
+              </div>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Size</div>
+            <div class="g">
+              <div class="d-flex justify-content-between"><b style="font-size:13px">2.3M – 3.1M</b><span class="ok">Good</span></div>
+              <div class="gbar"><i></i></div>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Daily budget</div>
+            <div>
+              <div class="money"><em>USD</em><input value="55,000"></div>
+              <div class="small text-muted mt-1">Suggested 55,000 from similar campaigns</div>
+            </div>
+          </div>
+          <div class="rowx">
+            <div class="k">Schedule</div>
+            <div class="dates">
+              <input class="in" type="date" value="2026-08-17">
+              <span>to</span>
+              <input class="in" type="date" value="2026-08-31">
+              <span class="text-muted small">UTC</span>
+            </div>
+          </div>
+
+          <div class="foot">
+            <span class="text-muted small">Draft saved · 1 of 8 complete</span>
+            <button class="btn btn-primary" type="button">Continue to Connect Account</button>
+          </div>
+        </form>
+
+        <aside class="side">
+          <div class="cardx">
+            <h3><i class="bi bi-stars"></i> Forecast</h3>
+            <div class="hero">
+              <div><span>CPL</span><b>$25</b></div>
+              <div><span>Leads</span><b>80</b></div>
+            </div>
+            <div class="line"><span>Budget / day</span><b>USD 55,000</b></div>
+            <div class="line"><span>Best window</span><b>Weekdays 6–9 PM</b></div>
+            <div class="line"><span>Audience</span><b>High-intent · top cities</b></div>
+            <div class="line"><span>Qualified</span><b>30% · ~24</b></div>
+            <div class="mt-2">
+              <div class="d-flex justify-content-between small fw-bold"><span>Confidence</span><span style="color:#16a34a">High 86%</span></div>
+              <div class="conf"><i></i></div>
+            </div>
+            <button class="btn btn-yellow w-100 mt-2">Apply all</button>
+          </div>
+          <div class="cardx">
+            <h3>Why this brief</h3>
+            <p class="small text-muted mb-0">Numbers come from similar Housing lead campaigns in this workspace — not generic averages.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+    <div class="crm-footer">© 2026 GrowLead CRM. All rights reserved.</div>
+  </div>
+</div>
+<script>
+document.querySelectorAll('[data-seg]').forEach(group => {
+  group.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+    });
+  });
+});
+</script>
+</body>
+</html>

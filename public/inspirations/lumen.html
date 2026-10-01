@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen · GrowLead</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f3f1ec;
+  --bg-2: #ebe7de;
+  --surface: #fffcf7;
+  --ink: #161513;
+  --muted: #6f6b64;
+  --line: #e6e1d8;
+  --line-2: #efebe3;
+  --blue: #1d4ed8;
+  --blue-soft: #eef3ff;
+  --green: #0f7a4a;
+  --green-soft: #e8f6ee;
+  --red: #c2412d;
+  --red-soft: #fbecea;
+  --gold: #9a7b3c;
+  --shadow: 0 1px 1px rgba(22,21,19,.04), 0 8px 24px rgba(22,21,19,.05);
+  --shadow-lg: 0 1px 1px rgba(22,21,19,.04), 0 18px 40px rgba(22,21,19,.08);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 480px at 80% -10%, rgba(29,78,216,.07), transparent 55%),
+    radial-gradient(900px 420px at 0% 100%, rgba(154,123,60,.06), transparent 50%),
+    var(--bg);
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", Inter, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.45;
+  letter-spacing: -.015em;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 40;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a { color: inherit; text-decoration: none; }
+button, input { font-family: inherit; }
+button { cursor: pointer; }
+.num { font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+.serif { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; letter-spacing: -.03em; }
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 212px 1fr;
+}
+
+/* Sidebar */
+.side {
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column;
+  padding: 12px 10px 12px;
+  background: rgba(250,249,246,.78);
+  backdrop-filter: blur(18px);
+  border-right: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 9px; padding: 2px 6px 10px; }
+.logo {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--ink); color: #f6f1e8;
+  display: grid; place-items: center; font-size: 13px;
+  box-shadow: 0 6px 12px rgba(22,21,19,.16);
+}
+.brand b { display: block; font-size: 13px; font-weight: 800; letter-spacing: -.03em; }
+.brand small { color: var(--muted); font-size: 10.5px; font-weight: 600; }
+.ws {
+  display: flex; align-items: center; gap: 8px;
+  margin: 0 2px 10px; padding: 8px 9px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 11px;
+  box-shadow: var(--shadow);
+}
+.ws .mark {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: linear-gradient(180deg, #2a2824, #161513); color: #f6f1e8;
+  display: grid; place-items: center; font-size: 10px; font-weight: 800;
+}
+.ws b { display: block; font-size: 12px; font-weight: 750; }
+.ws small { color: var(--muted); font-size: 10.5px; display: flex; align-items: center; gap: 5px; }
+.live { width: 6px; height: 6px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.16); }
+.lbl {
+  margin: 8px 10px 4px; font-size: 10px; font-weight: 800;
+  color: #a39e94; letter-spacing: .12em; text-transform: uppercase;
+}
+.nav a {
+  display: flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 9px; margin: 1px 2px; border-radius: 8px;
+  color: #5c5852; font-weight: 600; font-size: 13px;
+}
+.nav a i { width: 15px; text-align: center; font-size: 14px; color: #8a857c; }
+.nav a:hover { background: rgba(22,21,19,.04); color: var(--ink); }
+.nav a.on { background: var(--ink); color: #f6f1e8; font-weight: 700; }
+.nav a.on i { color: #f6f1e8; }
+.nav .badge {
+  margin-left: auto; font-size: 10.5px; font-weight: 750; color: #6f6b64;
+  background: #efebe3; padding: 1px 6px; border-radius: 99px;
+}
+.nav a.on .badge { background: rgba(246,241,232,.16); color: #f6f1e8; }
+.side-user {
+  margin-top: auto; display: flex; align-items: center; gap: 8px;
+  padding: 8px; border-radius: 11px; border: 1px solid transparent;
+}
+.side-user:hover { background: var(--surface); border-color: var(--line); }
+.side-user b { display: block; font-size: 12.5px; font-weight: 750; }
+.side-user small { color: var(--muted); font-size: 11px; }
+
+/* Main */
+.main { min-width: 0; display: flex; flex-direction: column; }
+.top {
+  position: sticky; top: 0; z-index: 8;
+  display: flex; align-items: center; gap: 14px;
+  min-height: 56px; padding: 10px 18px;
+  background: rgba(243,241,236,.78);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--line);
+}
+.search {
+  flex: 1; min-width: 180px; height: 36px;
+  display: flex; align-items: center; gap: 8px; padding: 0 12px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  color: #a39e94; box-shadow: 0 1px 0 rgba(255,255,255,.7) inset;
+  overflow: hidden;
+}
+.search i { flex-shrink: 0; font-size: 14px; line-height: 1; color: #a39e94; }
+.search:focus-within { border-color: #c9c2b4; box-shadow: 0 0 0 3px rgba(22,21,19,.06); }
+.search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 13px; color: var(--ink); font-weight: 500; }
+.kbd {
+  flex-shrink: 0; font-size: 10px; font-weight: 700; color: #a39e94;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px;
+}
+.top-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.switch { display: flex; padding: 2px; background: #ebe7de; border-radius: 9px; }
+.switch a {
+  height: 28px; padding: 0 10px; border-radius: 7px;
+  font-size: 12px; font-weight: 750; color: var(--muted); display: grid; place-items: center;
+}
+.switch a.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(22,21,19,.08); }
+.ghost, .primary, .icon-btn {
+  height: 36px; border-radius: 10px; font-size: 12.5px; font-weight: 750;
+  white-space: nowrap; flex-shrink: 0; overflow: visible; line-height: 1;
+}
+.ghost {
+  padding: 0 12px; background: var(--surface); border: 1px solid var(--line); color: #3d3a35;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.ghost:hover { background: #fff; }
+.primary {
+  padding: 0 14px; background: var(--ink); border: 1px solid var(--ink); color: #f6f1e8;
+  box-shadow: 0 6px 14px rgba(22,21,19,.14);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.primary:hover { background: #2a2824; }
+.icon-btn {
+  width: 36px; padding: 0; border: 1px solid var(--line); background: var(--surface); color: #3d3a35;
+  display: grid; place-items: center; position: relative; flex-shrink: 0;
+}
+.icon-btn .ping {
+  position: absolute; top: 6px; right: 7px; width: 6px; height: 6px;
+  background: var(--blue); border-radius: 50%; border: 2px solid var(--surface);
+}
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.page { padding: 14px 18px 22px; }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+.kicker { margin: 0 0 2px; font-size: 10.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #a39e94; }
+.head h1 { margin: 0; font-size: 24px; line-height: 1.1; }
+.head p { margin: 3px 0 0; color: var(--muted); font-size: 13px; font-weight: 500; }
+.seg { display: flex; background: var(--surface); border: 1px solid var(--line); padding: 2px; border-radius: 9px; box-shadow: var(--shadow); }
+.seg button {
+  height: 26px; padding: 0 10px; border: 0; background: transparent;
+  border-radius: 7px; font-size: 12px; font-weight: 750; color: var(--muted);
+}
+.seg button.on { background: var(--ink); color: #f6f1e8; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+.card-h {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px 0;
+}
+.card-h h2 { margin: 0; font-size: 13.5px; font-weight: 800; letter-spacing: -.02em; }
+.card-h span, .quiet { color: var(--muted); font-size: 12px; font-weight: 600; }
+.card-h a.quiet:hover { color: var(--ink); }
+
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+.kpi { padding: 12px 14px; transition: transform .18s ease, box-shadow .18s ease; }
+.kpi:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+.kpi .row { display: flex; justify-content: space-between; align-items: flex-start; }
+.ico-well {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: grid; place-items: center; font-size: 13px;
+  background: var(--bg); color: var(--ink); border: 1px solid var(--line);
+}
+.kpi span { display: block; color: var(--muted); font-size: 11.5px; font-weight: 650; }
+.kpi b { display: block; margin-top: 6px; font-size: 22px; font-weight: 400; line-height: 1; }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 6px;
+  height: 20px; padding: 0 7px; border-radius: 99px;
+  font-size: 11px; font-weight: 750; background: var(--green-soft); color: var(--green);
+}
+.chip.down { background: var(--red-soft); color: var(--red); }
+
+.hero { margin-bottom: 10px; overflow: hidden; }
+.hero-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 16px 0; }
+.hero-top .k { color: var(--muted); font-size: 12px; font-weight: 650; }
+.hero-top .v { font-size: 28px; line-height: 1; margin-top: 2px; }
+.hero-top .delta { color: var(--green); font-size: 12.5px; font-weight: 750; margin-top: 4px; }
+.chart { height: 132px; padding: 2px 6px 0; }
+.chart svg { width: 100%; height: 100%; display: block; }
+.axis { display: flex; justify-content: space-between; padding: 2px 16px 12px; color: #a39e94; font-size: 11px; font-weight: 650; }
+
+.grid-2 { display: grid; grid-template-columns: 1.15fr .85fr; gap: 10px; margin-bottom: 10px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1.08fr 1fr; gap: 10px; }
+
+.pipe { padding: 8px 14px 12px; }
+.mix { display: flex; height: 7px; border-radius: 99px; overflow: hidden; background: var(--bg); margin: 10px 0 6px; }
+.mix i { display: block; height: 100%; }
+.conv {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px; padding: 8px 10px; border-radius: 10px;
+  background: var(--bg); border: 1px solid var(--line-2);
+}
+.conv b { font-size: 13px; }
+.conv span { color: var(--muted); font-size: 12px; font-weight: 600; }
+.stages { display: flex; flex-direction: column; }
+.st {
+  display: grid; grid-template-columns: 10px 1fr auto auto; gap: 8px; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid var(--line-2);
+}
+.st:last-child { border-bottom: 0; }
+.st .sw { width: 7px; height: 7px; border-radius: 50%; }
+.st b { font-weight: 650; color: #3d3a35; }
+.st .c { font-weight: 800; }
+.st .p { color: var(--muted); width: 38px; text-align: right; font-weight: 650; }
+
+.src { display: grid; grid-template-columns: 28px 1fr 56px 40px; gap: 9px; align-items: center; padding: 8px 14px; }
+.src + .src { border-top: 1px solid var(--line-2); }
+.src:hover { background: #faf8f3; }
+.ico {
+  width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: #fff; font-size: 13px;
+}
+.bar { height: 4px; background: var(--bg); border-radius: 99px; margin-top: 4px; }
+.bar i { display: block; height: 100%; background: var(--ink); border-radius: 99px; }
+.src .pct { color: var(--muted); text-align: right; font-weight: 650; }
+
+.map-wrap { padding: 6px 12px 4px; }
+.map {
+  height: 108px; border-radius: 11px; position: relative; overflow: hidden;
+  background: linear-gradient(180deg, #f7f4ee, #ece7dc);
+  border: 1px solid var(--line-2);
+}
+.map svg { width: 100%; height: 100%; }
+.locs { padding: 0 14px 10px; }
+.loc { display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--line-2); font-weight: 650; }
+.loc span { color: var(--muted); }
+
+.insight { padding: 10px 12px 12px; }
+.feature {
+  padding: 12px; border-radius: 11px;
+  background: linear-gradient(#fffcf7, #fffcf7) padding-box,
+              linear-gradient(135deg, #161513, #9a7b3c) border-box;
+  border: 1px solid transparent;
+}
+.feature .tag { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.feature b { display: block; font-size: 13.5px; font-weight: 800; margin-bottom: 4px; letter-spacing: -.02em; }
+.feature p { margin: 0 0 10px; color: var(--muted); font-size: 12px; }
+.feature .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.feature .actions .primary, .feature .actions .ghost { height: 32px; padding: 0 14px; }
+.mini { padding: 8px 2px 0; }
+.mini + .mini { border-top: 1px solid var(--line-2); margin-top: 8px; padding-top: 8px; }
+.mini span { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #a39e94; }
+.mini b { display: block; margin: 2px 0 1px; font-weight: 750; }
+.mini p { margin: 0; color: var(--muted); font-size: 12px; }
+
+.feed { padding: 2px 12px 10px; }
+.item { display: flex; gap: 9px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line-2); }
+.item:first-child { border-top: 0; }
+.item .t {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: grid; place-items: center; flex-shrink: 0; font-size: 13px;
+}
+.t.wa { background: #e9f8ef; color: #128C7E; }
+.t.call { background: var(--blue-soft); color: var(--blue); }
+.t.mail { background: #f4eee4; color: var(--gold); }
+.t.note { background: #f3f1ec; color: #5c5852; }
+.item b { display: block; font-weight: 700; }
+.item small { color: var(--muted); }
+
+.team { padding: 2px 12px 10px; }
+.agent { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-top: 1px solid var(--line-2); }
+.agent:first-child { border-top: 0; }
+.agent .rank { width: 16px; color: #a39e94; font-size: 11px; font-weight: 800; }
+.agent img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
+.agent .who { flex: 1; }
+.agent b { display: block; font-weight: 750; }
+.agent small { color: var(--muted); }
+.agent .m { text-align: right; font-weight: 800; }
+.agent .m small { display: block; color: var(--green); font-weight: 750; }
+
+.deal { padding: 10px 14px; border-top: 1px solid var(--line-2); }
+.deal:first-of-type { border-top: 0; }
+.deal .r { display: flex; justify-content: space-between; font-weight: 750; }
+.deal small { color: var(--muted); }
+.pbar { height: 4px; background: var(--bg); border-radius: 99px; margin-top: 7px; }
+.pbar i { display: block; height: 100%; background: var(--ink); border-radius: 99px; }
+
+.tasks {
+  margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 10px 14px;
+}
+.tasks .s { display: flex; gap: 18px; flex-wrap: wrap; color: #3d3a35; font-weight: 650; }
+.tasks .s b { font-weight: 800; }
+.tasks a { color: var(--ink); font-weight: 800; }
+
+@media (max-width: 1180px) {
+  .app { grid-template-columns: 1fr; }
+  .side { display: none; }
+  .kpis, .grid-2, .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .kpis, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .head h1 { font-size: 22px; }
+  .top { padding: 0 12px; }
+  .page { padding: 12px 12px 20px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo"><i class="bi bi-broadcast"></i></div>
+      <div><b>GrowLead</b><small>Workspace CRM</small></div>
+    </div>
+    <div class="ws">
+      <div class="mark">N</div>
+      <div><b>Northstar</b><small><span class="live"></span>6 campaigns live</small></div>
+    </div>
+    <nav class="nav">
+      <div class="lbl">Workspace</div>
+      <a class="on" href="#"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+      <a href="#"><i class="bi bi-people"></i> Leads <span class="badge">12</span></a>
+      <a href="#"><i class="bi bi-megaphone"></i> Campaigns</a>
+      <a href="#"><i class="bi bi-stars"></i> AI Copilot</a>
+      <div class="lbl">Manage</div>
+      <a href="#"><i class="bi bi-bar-chart"></i> Reports</a>
+      <a href="#"><i class="bi bi-person-badge"></i> Users</a>
+      <a href="#"><i class="bi bi-lightning"></i> Automations</a>
+      <a href="#"><i class="bi bi-plug"></i> Integrations</a>
+      <a href="#"><i class="bi bi-gear"></i> Settings</a>
+    </nav>
+    <a class="side-user" href="#">
+      <img class="avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&h=80&q=80" alt="">
+      <div><b>Ali Raza</b><small>Administrator</small></div>
+    </a>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <label class="search">
+        <i class="bi bi-search"></i>
+        <input placeholder="Search leads, campaigns, people">
+        <span class="kbd">⌘K</span>
+      </label>
+      <div class="top-right">
+        <div class="switch"><a class="on" href="lumen.html">Lumen</a><a href="noir.html">Noir</a></div>
+        <button class="ghost" type="button"><i class="bi bi-calendar3"></i> 10–17 Aug</button>
+        <button class="ghost" type="button">Export</button>
+        <button class="primary" type="button">New campaign</button>
+        <button class="icon-btn" type="button" aria-label="Notifications"><i class="bi bi-bell"></i><span class="ping"></span></button>
+        <img class="avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&h=80&q=80" alt="">
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="head">
+        <div>
+          <p class="kicker">Monday · 17 August 2026</p>
+          <h1 class="serif">Good afternoon, Ali</h1>
+          <p>2,847 leads this period · 12 waiting past SLA</p>
+        </div>
+        <div class="seg">
+          <button type="button">7d</button>
+          <button class="on" type="button">14d</button>
+          <button type="button">30d</button>
+          <button type="button">QTD</button>
+        </div>
+      </div>
+
+      <section class="kpis">
+        <article class="card kpi">
+          <div class="row"><span>Qualified</span><div class="ico-well"><i class="bi bi-check2-circle"></i></div></div>
+          <b class="serif num">612</b>
+          <span class="chip">↑ 12.1%</span>
+        </article>
+        <article class="card kpi">
+          <div class="row"><span>Active deals</span><div class="ico-well"><i class="bi bi-briefcase"></i></div></div>
+          <b class="serif num">94</b>
+          <span class="chip">↑ 6.2%</span>
+        </article>
+        <article class="card kpi">
+          <div class="row"><span>Cost per lead</span><div class="ico-well"><i class="bi bi-coin"></i></div></div>
+          <b class="serif num">$24.80</b>
+          <span class="chip down">↓ 8.3%</span>
+        </article>
+        <article class="card kpi">
+          <div class="row"><span>Closed revenue</span><div class="ico-well"><i class="bi bi-graph-up-arrow"></i></div></div>
+          <b class="serif num">$186.4k</b>
+          <span class="chip">↑ 22.7%</span>
+        </article>
+      </section>
+
+      <section class="card hero">
+        <div class="hero-top">
+          <div>
+            <div class="k">Leads acquired</div>
+            <div class="v serif num">2,847</div>
+            <div class="delta">↑ 18.4% vs previous 14 days</div>
+          </div>
+          <span class="quiet">Daily volume · 10–17 Aug 2026</span>
+        </div>
+        <div class="chart">
+          <svg viewBox="0 0 720 196" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#161513" stop-opacity=".16"/>
+                <stop offset="100%" stop-color="#161513" stop-opacity="0"/>
+              </linearGradient>
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2.2" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <line x1="0" y1="49" x2="720" y2="49" stroke="#efebe3"/>
+            <line x1="0" y1="98" x2="720" y2="98" stroke="#efebe3"/>
+            <line x1="0" y1="147" x2="720" y2="147" stroke="#efebe3"/>
+            <path d="M0,138 C48,134 96,126 144,118 C192,110 240,102 288,108 C336,114 384,82 432,72 C480,62 528,68 576,50 C624,32 672,42 720,30 L720,196 L0,196 Z" fill="url(#fill)"/>
+            <path d="M0,138 C48,134 96,126 144,118 C192,110 240,102 288,108 C336,114 384,82 432,72 C480,62 528,68 576,50 C624,32 672,42 720,30" fill="none" stroke="#161513" stroke-width="2.4" stroke-linecap="round" filter="url(#glow)"/>
+            <circle cx="720" cy="30" r="5" fill="#161513"/>
+            <circle cx="720" cy="30" r="9" fill="#161513" opacity=".16"/>
+          </svg>
+        </div>
+        <div class="axis"><span>10 Aug</span><span>12 Aug</span><span>14 Aug</span><span>16 Aug</span><span>17 Aug</span></div>
+      </section>
+
+      <section class="grid-2">
+        <article class="card">
+          <div class="card-h"><h2>Lead pipeline</h2><span>New → won</span></div>
+          <div class="pipe">
+            <div class="conv"><b class="serif">4.9% conversion</b><span>41 closed won this period</span></div>
+            <div class="mix">
+              <i style="width:30%;background:#161513"></i>
+              <i style="width:22%;background:#3d3a35"></i>
+              <i style="width:14%;background:#6f6b64"></i>
+              <i style="width:9%;background:#9a7b3c"></i>
+              <i style="width:5%;background:#c4a574"></i>
+              <i style="width:3%;background:#0f7a4a"></i>
+              <i style="width:2%;background:#16a34a"></i>
+            </div>
+            <div class="stages">
+              <div class="st"><span class="sw" style="background:#161513"></span><b>New lead</b><span class="c num">842</span><span class="p">30%</span></div>
+              <div class="st"><span class="sw" style="background:#3d3a35"></span><b>Contacted</b><span class="c num">614</span><span class="p">22%</span></div>
+              <div class="st"><span class="sw" style="background:#6f6b64"></span><b>Qualified</b><span class="c num">412</span><span class="p">14%</span></div>
+              <div class="st"><span class="sw" style="background:#9a7b3c"></span><b>Opportunity</b><span class="c num">268</span><span class="p">9%</span></div>
+              <div class="st"><span class="sw" style="background:#c4a574"></span><b>Proposal</b><span class="c num">154</span><span class="p">5%</span></div>
+              <div class="st"><span class="sw" style="background:#0f7a4a"></span><b>Negotiation</b><span class="c num">86</span><span class="p">3%</span></div>
+              <div class="st"><span class="sw" style="background:#16a34a"></span><b>Closed won</b><span class="c num">41</span><span class="p">1.4%</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h"><h2>Lead sources</h2><span>Share of volume</span></div>
+          <div class="src"><div class="ico" style="background:#1877F2"><i class="bi bi-meta"></i></div><div><b>Meta</b><div class="bar"><i style="width:100%"></i></div></div><b class="num">968</b><span class="pct">34%</span></div>
+          <div class="src"><div class="ico" style="background:#EA4335"><i class="bi bi-google"></i></div><div><b>Google</b><div class="bar"><i style="width:65%"></i></div></div><b class="num">626</b><span class="pct">22%</span></div>
+          <div class="src"><div class="ico" style="background:#E1306C"><i class="bi bi-instagram"></i></div><div><b>Instagram</b><div class="bar"><i style="width:53%"></i></div></div><b class="num">512</b><span class="pct">18%</span></div>
+          <div class="src"><div class="ico" style="background:#111"><i class="bi bi-tiktok"></i></div><div><b>TikTok</b><div class="bar"><i style="width:32%"></i></div></div><b class="num">313</b><span class="pct">11%</span></div>
+          <div class="src"><div class="ico" style="background:#0A66C2"><i class="bi bi-linkedin"></i></div><div><b>LinkedIn</b><div class="bar"><i style="width:26%"></i></div></div><b class="num">256</b><span class="pct">9%</span></div>
+          <div class="src"><div class="ico" style="background:#6f6b64"><i class="bi bi-globe"></i></div><div><b>Direct</b><div class="bar"><i style="width:18%"></i></div></div><b class="num">172</b><span class="pct">6%</span></div>
+        </article>
+      </section>
+
+      <section class="grid-3">
+        <article class="card">
+          <div class="card-h"><h2>Lead hotspots</h2><a class="quiet" href="#">View map</a></div>
+          <div class="map-wrap">
+            <div class="map">
+              <svg viewBox="0 0 280 132" aria-hidden="true">
+                <path d="M32,82 C48,38 96,22 142,30 C188,38 218,20 252,42 C266,52 260,88 232,100 C188,118 138,110 92,104 C58,100 22,104 32,82Z" fill="#ddd6c8" stroke="#d0c8b8"/>
+                <circle cx="168" cy="52" r="14" fill="#161513" opacity=".08"/>
+                <circle cx="168" cy="52" r="5" fill="#161513"/><text x="178" y="48" font-size="10" fill="#6f6b64" font-family="Plus Jakarta Sans" font-weight="700">Lahore</text>
+                <circle cx="92" cy="86" r="4.2" fill="#9a7b3c"/><text x="101" y="90" font-size="10" fill="#6f6b64" font-family="Plus Jakarta Sans" font-weight="700">Karachi</text>
+                <circle cx="158" cy="36" r="3.6" fill="#3d3a35"/><text x="167" y="32" font-size="10" fill="#6f6b64" font-family="Plus Jakarta Sans" font-weight="700">Islamabad</text>
+                <circle cx="58" cy="58" r="3.2" fill="#6f6b64"/><text x="67" y="56" font-size="10" fill="#6f6b64" font-family="Plus Jakarta Sans" font-weight="700">Dubai</text>
+              </svg>
+            </div>
+          </div>
+          <div class="locs">
+            <div class="loc">Lahore <span class="num">412</span></div>
+            <div class="loc">Karachi <span class="num">286</span></div>
+            <div class="loc">Islamabad <span class="num">194</span></div>
+            <div class="loc">Dubai <span class="num">128</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h"><h2>AI Copilot</h2><span>Beta</span></div>
+          <div class="insight">
+            <div class="feature">
+              <div class="tag">Recommended</div>
+              <b>Move $4,200 into Meta auction</b>
+              <p>Housing · August is 38% cheaper CPL than the workspace average. Keep 25–45, evenings.</p>
+              <div class="actions">
+                <button class="primary" type="button">Apply</button>
+                <button class="ghost" type="button">Dismiss</button>
+              </div>
+            </div>
+            <div class="mini"><span>Attention</span><b>12 leads past 4-minute SLA</b><p>Mostly Meta housing inquiries from Lahore, 6–9 PM.</p></div>
+            <div class="mini"><span>Window</span><b>Weekdays 6–9 PM</b><p>Highest qualified rate in the last 14 days.</p></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h"><h2>Recent activity</h2><a class="quiet" href="#">View all</a></div>
+          <div class="feed">
+            <div class="item"><div class="t wa"><i class="bi bi-whatsapp"></i></div><div><b>WhatsApp · Omar Sheikh</b><small>DHA Phase 6 · 4m ago</small></div></div>
+            <div class="item"><div class="t call"><i class="bi bi-telephone"></i></div><div><b>Call · Fatima Noor</b><small>Bahria · 18m ago</small></div></div>
+            <div class="item"><div class="t mail"><i class="bi bi-envelope"></i></div><div><b>Proposal sent · Bilal Ahmed</b><small>Gulberg · 41m ago</small></div></div>
+            <div class="item"><div class="t note"><i class="bi bi-sticky"></i></div><div><b>Note · Nadia Ali</b><small>Follow-up Friday · 1h ago</small></div></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-2" style="margin-top:10px">
+        <article class="card">
+          <div class="card-h"><h2>Top performing users</h2><a class="quiet" href="#">View team</a></div>
+          <div class="team">
+            <div class="agent"><span class="rank">01</span><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80" alt=""><div class="who"><b>Sara Khan</b><small>Closer</small></div><div class="m num">41 won<small>28% conv.</small></div></div>
+            <div class="agent"><span class="rank">02</span><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&h=80&q=80" alt=""><div class="who"><b>Hassan Malik</b><small>Hunter</small></div><div class="m num">33 won<small>24% conv.</small></div></div>
+            <div class="agent"><span class="rank">03</span><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&h=80&q=80" alt=""><div class="who"><b>Nadia Ali</b><small>Team lead</small></div><div class="m num">27 won<small>21% conv.</small></div></div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-h"><h2>Likely closings this week</h2><span class="num">$94.2k · 3 deals</span></div>
+          <div class="deal"><div class="r">DHA Phase 6 villa<span class="num">$42,000</span></div><small>Omar Sheikh · Friday · 82% likely</small><div class="pbar"><i style="width:82%"></i></div></div>
+          <div class="deal"><div class="r">Bahria apartment<span class="num">$28,500</span></div><small>Fatima Noor · Saturday · 64% likely</small><div class="pbar"><i style="width:64%"></i></div></div>
+          <div class="deal"><div class="r">Gulberg penthouse<span class="num">$23,700</span></div><small>Bilal Ahmed · Monday · 51% likely</small><div class="pbar"><i style="width:51%"></i></div></div>
+        </article>
+      </section>
+
+      <div class="card tasks">
+        <div class="s">
+          <span><b>18</b> active tasks</span>
+          <span><b>7</b> unread</span>
+          <span><b>12</b> unresponded</span>
+          <span><b>4</b> overdue</span>
+        </div>
+        <a href="#">Open smart tasks →</a>
+      </div>
+    </main>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.seg').forEach(g => {
+  g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    g.querySelectorAll('button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  }));
+});
+</script>
+</body>
+</html>
