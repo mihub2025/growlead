@@ -23,7 +23,7 @@
         </button>
         <ul class="landing-nav__links" data-nav-links>
             <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="{{ route('home') }}?focus=contact">Contact Us</a></li>
+            <li><a href="{{ route('contact-us') }}">Contact Us</a></li>
             <li><a class="is-active" href="{{ route('privacy-policies') }}">Privacy &amp; Policies</a></li>
             <li><a class="landing-nav__cta" href="{{ route('login') }}">Login</a></li>
         </ul>
@@ -98,7 +98,7 @@
                         Follow our
                         <a href="{{ route('data-deletion') }}">User Data Deletion Instructions</a>
                         or reach us through the
-                        <a href="{{ route('home') }}?focus=contact">Contact Us</a> form
+                        <a href="{{ route('contact-us') }}">Contact Us</a> form
                         @if (! empty($contactEmail))
                             / <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
                         @endif
@@ -130,6 +130,7 @@
     <div class="landing-wrap landing-footer__inner">
         <div>&copy; {{ date('Y') }} GrowLead. All rights reserved.</div>
         <div class="landing-footer__links">
+            <a href="{{ route('contact-us') }}">Contact Us</a>
             <a href="{{ route('privacy-policies') }}">Privacy &amp; Policies</a>
             <a href="{{ route('terms') }}">Terms</a>
             <a href="{{ route('login') }}">Login</a>

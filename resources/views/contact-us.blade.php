@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="GrowLead CRM — manage campaigns, leads, and Meta Lead Ads in one workspace.">
-    <title>GrowLead — Campaign & Lead CRM</title>
+    <meta name="description" content="Contact GrowLead — send a message to our team.">
+    <title>Contact Us — GrowLead</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
         </button>
         <ul class="landing-nav__links" data-nav-links>
             <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="{{ route('contact-us') }}">Contact Us</a></li>
+            <li><a class="is-active" href="{{ route('contact-us') }}">Contact Us</a></li>
             <li><a href="{{ route('privacy-policies') }}">Privacy &amp; Policies</a></li>
             <li><a class="landing-nav__cta" href="{{ route('login') }}">Login</a></li>
         </ul>
@@ -31,24 +31,42 @@
 </header>
 
 <main>
-    <section class="landing-hero" id="home">
-        <div class="landing-hero__glow" aria-hidden="true"></div>
-        <div class="landing-wrap landing-hero__grid">
-            <div>
-                <span class="landing-kicker">Workspace CRM</span>
-                <h1>GrowLead<em>.</em></h1>
-                <p class="landing-hero__lead">
-                    Run campaigns, capture Meta Lead Ads, and move every lead through your pipeline —
-                    from first contact to closed deal — in one focused workspace.
-                </p>
-                <div class="landing-hero__actions">
-                    <a class="btn-gl btn-gl--primary" href="{{ route('login') }}">Login</a>
-                    <a class="btn-gl btn-gl--ghost" href="{{ route('contact-us') }}">Contact Us</a>
+    <section class="landing-section" style="padding-top: 3.5rem;">
+        <div class="landing-wrap">
+            <div class="landing-section__head">
+                <h2>Contact Us</h2>
+                <p>Send a message and our team will respond as soon as possible.</p>
+            </div>
+
+            @if (session('contact_success'))
+                <div class="landing-alert landing-alert--ok" role="status">{{ session('contact_success') }}</div>
+            @endif
+
+            @if ($errors->any())
+                <div class="landing-alert landing-alert--err" role="alert">
+                    Please fix the highlighted fields and try again.
                 </div>
-            </div>
-            <div class="landing-hero__mark">
-                <img src="{{ asset('assets/images/growlead.png') }}" alt="GrowLead logo">
-            </div>
+            @endif
+
+            <form class="landing-form" method="POST" action="{{ route('contact.store') }}" novalidate>
+                @csrf
+                <label>
+                    Name
+                    <input type="text" name="name" value="{{ old('name') }}" required maxlength="120" autocomplete="name">
+                    @error('name') <span class="landing-field-error">{{ $message }}</span> @enderror
+                </label>
+                <label>
+                    Email
+                    <input type="email" name="email" value="{{ old('email') }}" required maxlength="190" autocomplete="email">
+                    @error('email') <span class="landing-field-error">{{ $message }}</span> @enderror
+                </label>
+                <label>
+                    Message
+                    <textarea name="message" required maxlength="5000">{{ old('message') }}</textarea>
+                    @error('message') <span class="landing-field-error">{{ $message }}</span> @enderror
+                </label>
+                <button class="btn-gl btn-gl--primary" type="submit">Send message</button>
+            </form>
         </div>
     </section>
 </main>

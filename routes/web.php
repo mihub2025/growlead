@@ -42,6 +42,13 @@ Route::post('/contact', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('contact.store');
 
+Route::get('/contact-us', function () {
+    return view('contact-us', [
+        'appName' => config('crm.name', config('app.name')),
+        'contactEmail' => config('crm.privacy_email'),
+    ]);
+})->name('contact-us');
+
 Route::get('/Privacy-policies', function () {
 
     // dd(Hash::make('QW@456Ytn'));
